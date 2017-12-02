@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
+const session = require('express-session');
 
 //Map Global Promise - getes rid of mongoose warning
 mongoose.Promise = global.Promise;
@@ -19,6 +21,23 @@ const Idea = mongoose.model('ideas');
 
 //method override middlemware
 router.use(methodOverride('_method'));
+
+//Express session middleware
+router.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+}));
+
+router.use(flash());
+
+//Global Variables
+router.use(function(req, res, next) {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+});
 
 //ideas index
 router.get('/', (req, res) => {
@@ -74,6 +93,7 @@ router.post('/', (req, res) => {
         new Idea(newUser)
             .save()
             .then(idea => {
+                req.flash('success_msg', 'Video successfully added');
                 res.redirect('/ideas');
             })
     }
@@ -90,6 +110,7 @@ router.put('/:id', (req, res) => {
 
             idea.save()
                 .then( () => {
+                    req.flash('success_msg', 'Video successfully edited');
                     res.redirect('/ideas');
                 })
         });
@@ -99,6 +120,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     Idea.remove({_id: req.params.id})
         .then(() => {
+            req.flash('success_msg', 'Video idea removed');
             res.redirect('/ideas');
         })
 });
