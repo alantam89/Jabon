@@ -1,35 +1,37 @@
-var express = require('express');
+const express = require('express');
 const exphbs = require('express-handlebars');
+const methodOverride = require('method-override');
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const flash = require('connect-flash');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const path = require('path');
+// var favicon = require('serve-favicon');
+// var logger = require('morgan');
+// var cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const session = require('express-session');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var about = require('./routes/about');
+const app = express();
+
+//loads routes
+const index = require('./routes/index');
+const users = require('./routes/users');
+const about = require('./routes/about');
 const ideas = require('./routes/ideas');
 
-var app = express();
+
+//passport config
+require('./config/passport')(passport);
 //Map Global Promise - getes rid of mongoose warning
-//mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
-// //connect to mongoose
-// mongoose.connect('mongodb://localhost/vidjot-dev', {
-//     useMongoClient: true
-// })
-//     .then(() => console.log('MongoDB Connected...'))
-//     .catch(err => console.log(err));
-//
-// // load Idea Model
-// require('./models/Idea');
-// const Idea = mongoose.model('ideas');
-
+//connect to mongoose
+mongoose.connect('mongodb://localhost/vidjot-dev', {
+    useMongoClient: true
+})
+    .then(() => console.log('MongoDB Connected...'))
+    .catch(err => console.log(err));
 
 //handlebars middleware
 app.engine('handlebars', exphbs({
@@ -41,17 +43,11 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
+//static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+//method override middleware
+app.use(methodOverride('_method'));
 
 //Express session middleware
 app.use(session({
@@ -59,6 +55,11 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
 }));
+
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 //flash
 app.use(flash());
 
@@ -67,9 +68,11 @@ app.use(function(req, res, next) {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
+    res.locals.user = req.user || null;
     next();
 });
 
+//user routes
 app.use('/', index);
 app.use('/users', users);
 app.use('/about', about);
