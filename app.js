@@ -23,11 +23,15 @@ const ideas = require('./routes/ideas');
 
 //passport config
 require('./config/passport')(passport);
+
+//DB config
+const db = require('./config/database');
+
 //Map Global Promise - getes rid of mongoose warning
 mongoose.Promise = global.Promise;
 
 //connect to mongoose
-mongoose.connect('mongodb://localhost/jabon-dev', {
+mongoose.connect(db.mongoURI, {
     useMongoClient: true
 })
     .then(() => console.log('MongoDB Connected...'))

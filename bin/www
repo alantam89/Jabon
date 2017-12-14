@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('vidjot:server');
+var debug = require('debug')('jabon:server');
 var http = require('http');
 
 /**
