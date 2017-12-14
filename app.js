@@ -27,7 +27,7 @@ require('./config/passport')(passport);
 mongoose.Promise = global.Promise;
 
 //connect to mongoose
-mongoose.connect('mongodb://localhost/vidjot-dev', {
+mongoose.connect('mongodb://localhost/jabon-dev', {
     useMongoClient: true
 })
     .then(() => console.log('MongoDB Connected...'))

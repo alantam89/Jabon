@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/vidjot.iml" filepath="$PROJECT_DIR$/.idea/vidjot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Jabon/.idea/Jabon.iml" filepath="$PROJECT_DIR$/../Jabon/.idea/Jabon.iml" />
     </modules>
   </component>
 </project>

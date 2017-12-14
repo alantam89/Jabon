@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" node-parameters="/usr/local/bin/nodemon --inspect=3001" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" node-parameters="/usr/local/bin/nodemon --inspect=3001" path-to-js-file="$PROJECT_DIR$/../Jabon/bin/www" working-dir="$PROJECT_DIR$/../Jabon">
     <envs>
       <env name="DEBUG" value="vidjot:*" />
     </envs>
